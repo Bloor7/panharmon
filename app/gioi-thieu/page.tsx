@@ -1,0 +1,8 @@
+export default function GioiThieu() {
+  return (
+    <main>
+      <h1>Giới thiệu</h1>
+      <p>Đây là trang giới thiệu về Panharmon.</p>
+    </main>
+  );
+}
