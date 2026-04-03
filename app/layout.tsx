@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ClientProviders from "@/components/ClientProviders";
 import ChatWidget from "@/components/ui/ChatWidget";
+import { Analytics } from "@vercel/analytics/next"
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
@@ -47,6 +48,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ChatWidget />
+        <Analytics />
       </body>
     </html>
   );
