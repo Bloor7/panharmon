@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Cinzel, Cormorant_Garamond  } from "next/font/google";
+import { Cinzel, Cormorant_Garamond, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import ClientProviders from "@/components/ClientProviders";
+import ChatWidget from "@/components/ui/ChatWidget";
 
 const cinzel = Cinzel({
   variable: "--font-cinzel",
@@ -26,9 +18,15 @@ const cormorantGaramond = Cormorant_Garamond({
   weight: ["300", "400", "600"],
 });
 
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Panharmon",
-  description: "Bí mật của giấc mơ",
+  title: "Panharmon — Bí mật của giấc mơ",
+  description: "Giải mã ngôn ngữ bí ẩn của giấc mơ. Kết hợp tâm lý học Jung, tâm linh học và trí tuệ nhân tạo.",
 };
 
 export default function RootLayout({
@@ -38,15 +36,17 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${cormorantGaramond.variable} h-full antialiased`}
+      lang="vi"
+      className={`${cinzel.variable} ${cormorantGaramond.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-void text-ghost">
+      <body className="min-h-full flex flex-col bg-void text-ghost relative">
+        <ClientProviders />
         <Header />
-        <main className="flex-1 pt-20">
+        <main className="flex-1 pt-20 relative z-10">
           {children}
         </main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
