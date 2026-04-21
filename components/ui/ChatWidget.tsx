@@ -38,7 +38,7 @@ export default function ChatWidget() {
         ...prev,
         {
           role: "assistant",
-          text: "Tôi đang phân tích biểu tượng trong giấc mơ của bạn... Hãy ghé thăm mục Giải Mã để nhận báo cáo chi tiết từ AI của chúng tôi.",
+          text: "Panharmon đang trong quá trình phát triển ✨ Cảm ơn bạn đã nhắn tin! Trong thời gian này, bạn có thể:\n- Nhắn trực tiếp với chúng tôi qua TikTok / Instagram\n- Hoặc điền form nhật ký giấc mơ để được giải mã",
         },
       ]);
       setThinking(false);
@@ -79,7 +79,9 @@ export default function ChatWidget() {
                       : "bg-veil text-lavender border-l-2 border-gold"
                   }`}
                 >
-                  {msg.text}
+                  {msg.text.split("\n").map((line, j) => (
+                    <span key={j}>{line}{j < msg.text.split("\n").length - 1 && <br />}</span>
+                  ))}
                 </div>
               </div>
             ))}
