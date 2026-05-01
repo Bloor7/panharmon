@@ -28,6 +28,9 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "Panharmon — Bí mật của giấc mơ",
   description: "Giải mã ngôn ngữ bí ẩn của giấc mơ. Kết hợp tâm lý học Jung, tâm linh học và trí tuệ nhân tạo.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

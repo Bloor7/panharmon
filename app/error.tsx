@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 
 interface ErrorProps {
@@ -76,15 +75,15 @@ export default function Error({ error, reset }: ErrorProps) {
           Thử lại
         </button>
 
-        <Link
-          href="/"
+        <button
+          onClick={() => { window.location.href = "/"; }}
           className="inline-flex items-center gap-3 border border-veil hover:border-gold/60 text-lavender hover:text-ghost px-8 py-3 font-display text-xs tracking-widest uppercase transition-colors duration-300"
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
             <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Trang chủ
-        </Link>
+        </button>
       </div>
     </div>
   );
