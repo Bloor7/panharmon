@@ -85,7 +85,21 @@ export function getPostBySlug(slug: string): Post | null {
 }
 
 export function getRelatedPosts(currentSlug: string, tags: string[], limit = 3): PostMeta[] {
-  return getAllPosts()
-    .filter(p => p.slug !== currentSlug && p.tags.some(t => tags.includes(t)))
-    .slice(0, limit)
+  const all = getAllPosts().filter(p => p.slug !== currentSlug)
+
+  const withScore = all.map(p => ({
+    post: p,
+    score: p.tags.filter(t => tags.includes(t)).length,
+  }))
+
+  // Fisher-Yates shuffle to randomize within same-score buckets
+  for (let i = withScore.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[withScore[i], withScore[j]] = [withScore[j], withScore[i]]
+  }
+
+  // Stable sort: higher tag overlap = higher priority, shuffled order breaks ties
+  withScore.sort((a, b) => b.score - a.score)
+
+  return withScore.slice(0, limit).map(s => s.post)
 }
