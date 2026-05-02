@@ -92,7 +92,7 @@ export default function ContactSection() {
         <h2 className="reveal font-display text-3xl md:text-4xl tracking-wide text-star mb-4">
           Kết Nối Với Panharmon
         </h2>
-        <p className="reveal font-body text-base text-lavender/70 leading-relaxed mb-12 max-w-lg mx-auto">
+        <p className="reveal font-body text-base text-lavender leading-relaxed mb-12 max-w-lg mx-auto">
           Theo dõi chúng tôi để khám phá những bí ẩn mới nhất về thế giới giấc mơ,
           tâm linh và tiềm thức.
         </p>
@@ -104,7 +104,7 @@ export default function ContactSection() {
               key={social.name}
               href={social.href}
               aria-label={social.name}
-              className="w-11 h-11 flex items-center justify-center border border-veil text-lavender/60 hover:border-gold hover:text-gold transition-all duration-300"
+              className="w-11 h-11 flex items-center justify-center border border-veil text-iris hover:border-gold hover:text-gold transition-all duration-300"
             >
               {social.icon}
             </a>
@@ -114,7 +114,7 @@ export default function ContactSection() {
         {/* Divider */}
         <div className="reveal flex items-center gap-4 mb-12">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent to-veil/60" />
-          <span className="font-mono text-xs text-lavender/30 tracking-widest uppercase">hoặc</span>
+          <span className="font-mono text-xs text-iris tracking-widest uppercase">hoặc</span>
           <div className="flex-1 h-px bg-gradient-to-l from-transparent to-veil/60" />
         </div>
 
@@ -123,7 +123,7 @@ export default function ContactSection() {
           <h3 className="font-display text-lg tracking-wide text-star mb-2">
             Đăng Ký Nhận Bản Tin Huyền Bí
           </h3>
-          <p className="font-body text-sm text-lavender/60 mb-6">
+          <p className="font-body text-sm text-lavender mb-6">
             Mỗi tuần một chủ đề: biểu tượng, tâm linh, khoa học giấc mơ
           </p>
 

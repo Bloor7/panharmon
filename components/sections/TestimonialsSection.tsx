@@ -81,7 +81,7 @@ export default function TestimonialsSection() {
               {/* Author */}
               <div className="pt-4 border-t border-veil/40">
                 <div className="font-display text-sm text-star tracking-wide">{t.name}</div>
-                <div className="font-mono text-xs text-lavender/50 tracking-widest uppercase mt-0.5">
+                <div className="font-mono text-xs text-iris tracking-widest uppercase mt-0.5">
                   {t.role}
                 </div>
               </div>

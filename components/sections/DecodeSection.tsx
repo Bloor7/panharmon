@@ -59,7 +59,7 @@ export default function DecodeSection() {
               </svg>
             </div>
             <h3 className="font-display text-xl text-star mb-3">Đã nhận được giấc mơ của bạn</h3>
-            <p className="font-body text-lavender/70 text-base leading-relaxed max-w-sm mx-auto">
+            <p className="font-body text-lavender text-base leading-relaxed max-w-sm mx-auto">
               Aether đang phân tích các biểu tượng. Bạn sẽ nhận được kết quả qua email trong 24 giờ.
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function DecodeSection() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs tracking-widest text-lavender/60 uppercase">
+                <label className="font-mono text-xs tracking-widest text-iris uppercase">
                   Họ và tên
                 </label>
                 <input
@@ -84,7 +84,7 @@ export default function DecodeSection() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-mono text-xs tracking-widest text-lavender/60 uppercase">
+                <label className="font-mono text-xs tracking-widest text-iris uppercase">
                   Email
                 </label>
                 <input
@@ -97,7 +97,7 @@ export default function DecodeSection() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="font-mono text-xs tracking-widest text-lavender/60 uppercase">
+              <label className="font-mono text-xs tracking-widest text-iris uppercase">
                 Mô tả giấc mơ
               </label>
               <textarea
@@ -110,7 +110,7 @@ export default function DecodeSection() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="flex flex-col gap-2 relative">
-                <label className="font-mono text-xs tracking-widest text-lavender/60 uppercase">
+                <label className="font-mono text-xs tracking-widest text-iris uppercase">
                   Loại giấc mơ
                 </label>
                 <select required className={selectClass}>
@@ -132,7 +132,7 @@ export default function DecodeSection() {
               </div>
 
               <div className="flex flex-col gap-2 relative">
-                <label className="font-mono text-xs tracking-widest text-lavender/60 uppercase">
+                <label className="font-mono text-xs tracking-widest text-iris uppercase">
                   Thời điểm xuất hiện
                 </label>
                 <select required className={selectClass}>
@@ -161,7 +161,7 @@ export default function DecodeSection() {
               Gửi yêu cầu giải mã
             </button>
 
-            <p className="font-mono text-xs text-lavender/40 text-center tracking-wider">
+            <p className="font-mono text-xs text-iris text-center tracking-wider">
               Thông tin của bạn được bảo mật tuyệt đối
             </p>
           </form>

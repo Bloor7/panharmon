@@ -119,7 +119,7 @@ export default function HeroSection() {
         style={{ animation: "scroll-bounce 2.5s ease-in-out infinite" }}
         aria-hidden="true"
       >
-        <span className="font-mono text-xs tracking-widest text-lavender/50 uppercase">Cuộn xuống</span>
+        <span className="font-mono text-xs tracking-widest text-iris uppercase">Cuộn xuống</span>
         <svg width="14" height="22" viewBox="0 0 14 22" fill="none">
           <path
             d="M7 3 L7 19 M3 15 L7 19 L11 15"

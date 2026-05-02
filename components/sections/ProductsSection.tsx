@@ -94,12 +94,12 @@ export default function ProductsSection() {
 
               {/* Name */}
               <h3 className="font-display text-xl tracking-wide text-star mb-2">{product.name}</h3>
-              <p className="font-body text-sm text-lavender/70 mb-6 leading-relaxed">{product.desc}</p>
+              <p className="font-body text-sm text-lavender mb-6 leading-relaxed">{product.desc}</p>
 
               {/* Price */}
               <div className="flex items-baseline gap-1 mb-6 pb-6 border-b border-veil/40">
                 <span className="font-display text-3xl text-gold">{product.price}</span>
-                <span className="font-mono text-xs text-lavender/50">{product.period}</span>
+                <span className="font-mono text-xs text-iris">{product.period}</span>
               </div>
 
               {/* Features */}

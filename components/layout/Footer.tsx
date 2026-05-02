@@ -15,30 +15,30 @@ export default function Footer() {
             </svg>
             <span className="font-display text-base tracking-[0.25em] text-star">PANHARMON</span>
           </div>
-          <p className="font-mono text-xs tracking-widest text-lavender/50 uppercase">Bí mật của giấc mơ</p>
+          <p className="font-mono text-xs tracking-widest text-iris uppercase">Bí mật của giấc mơ</p>
         </div>
 
         {/* Copyright */}
-        <p className="font-mono text-xs tracking-widest text-lavender/40 text-center">
+        <p className="font-mono text-xs tracking-widest text-iris text-center">
           &copy; 2024 Panharmon. All rights reserved.
         </p>
 
         {/* Links */}
         <div className="flex gap-6">
           <Link
-            className="font-mono text-xs tracking-widest uppercase text-lavender opacity-50 hover:opacity-100 hover:text-gold transition-all duration-300"
+            className="font-mono text-xs tracking-widest uppercase text-iris hover:text-gold transition-all duration-300"
             href="/bao-mat"
           >
             Bảo mật
           </Link>
           <Link
-            className="font-mono text-xs tracking-widest uppercase text-lavender opacity-50 hover:opacity-100 hover:text-gold transition-all duration-300"
+            className="font-mono text-xs tracking-widest uppercase text-iris hover:text-gold transition-all duration-300"
             href="/dieu-khoan"
           >
             Điều khoản
           </Link>
           <Link
-            className="font-mono text-xs tracking-widest uppercase text-lavender opacity-50 hover:opacity-100 hover:text-gold transition-all duration-300"
+            className="font-mono text-xs tracking-widest uppercase text-iris hover:text-gold transition-all duration-300"
             href="/lien-he"
           >
             Liên hệ

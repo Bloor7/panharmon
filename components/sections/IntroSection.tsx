@@ -93,7 +93,7 @@ export default function IntroSection() {
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="font-display text-2xl text-gold mb-1">{stat.value}</div>
-                <div className="font-mono text-xs tracking-widest text-lavender/60 uppercase">{stat.label}</div>
+                <div className="font-mono text-xs tracking-widest text-iris uppercase">{stat.label}</div>
               </div>
             ))}
           </div>

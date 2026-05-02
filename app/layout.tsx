@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cinzel, Cormorant_Garamond, Space_Mono } from "next/font/google";
+import { Playfair_Display, Cormorant_Garamond, Noto_Sans_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -7,21 +7,23 @@ import ClientProviders from "@/components/ClientProviders";
 import ChatWidget from "@/components/ui/ChatWidget";
 import { Analytics } from "@vercel/analytics/next"
 
-const cinzel = Cinzel({
+const playfairDisplay = Playfair_Display({
   variable: "--font-cinzel",
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant-garamond",
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
 });
 
-const spaceMono = Space_Mono({
+const notoSansMono = Noto_Sans_Mono({
   variable: "--font-space-mono",
-  subsets: ["latin"],
+  subsets: ["latin", "vietnamese"],
   weight: ["400", "700"],
 });
 
@@ -41,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${cinzel.variable} ${cormorantGaramond.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${playfairDisplay.variable} ${cormorantGaramond.variable} ${notoSansMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-void text-ghost relative">
         <ClientProviders />
