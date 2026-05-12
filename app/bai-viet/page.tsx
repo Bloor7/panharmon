@@ -1,17 +1,48 @@
 import { getAllPosts } from '@/lib/posts'
 import SearchBar from '@/components/blog/SearchBar'
+import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 
+const SITE_URL = 'https://panharmon.com'
+
 export const metadata: Metadata = {
-  title: 'Bài Viết — Panharmon',
-  description: 'Thư viện giải mã giấc mơ — khám phá ý nghĩa ẩn sau những biểu tượng và giấc mộng.',
+  title: 'Thư Viện Giải Mã Giấc Mơ',
+  description:
+    'Khám phá ý nghĩa ẩn sau những biểu tượng trong giấc mơ. Thư viện 33+ bài phân tích theo tâm lý học Jung và tâm linh phương Đông.',
+  alternates: { canonical: `${SITE_URL}/bai-viet` },
+  openGraph: {
+    type: 'website',
+    url: `${SITE_URL}/bai-viet`,
+    title: 'Thư Viện Giải Mã Giấc Mơ — Panharmon',
+    description:
+      'Khám phá ý nghĩa ẩn sau những biểu tượng trong giấc mơ. Thư viện 33+ bài phân tích theo tâm lý học Jung và tâm linh phương Đông.',
+    locale: 'vi_VN',
+    siteName: 'Panharmon',
+  },
 }
 
 export default function BaiVietPage() {
   const posts = getAllPosts()
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Thư Viện Giải Mã Giấc Mơ — Panharmon',
+    description:
+      'Khám phá ý nghĩa ẩn sau những biểu tượng trong giấc mơ theo tâm lý học Jung và tâm linh phương Đông.',
+    url: `${SITE_URL}/bai-viet`,
+    numberOfItems: posts.length,
+    hasPart: posts.slice(0, 10).map(post => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `${SITE_URL}/bai-viet/${post.slug}`,
+      datePublished: post.date,
+    })),
+  }
+
   return (
-    <main className="min-h-screen bg-void">
+    <div className="min-h-screen bg-void">
+      <JsonLd data={collectionSchema} />
       <div className="relative z-10 pt-32 pb-24 px-6">
         {/* Page header */}
         <div className="max-w-6xl mx-auto text-center mb-16">
@@ -39,6 +70,6 @@ export default function BaiVietPage() {
           <SearchBar posts={posts} />
         </div>
       </div>
-    </main>
+    </div>
   )
 }

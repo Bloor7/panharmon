@@ -7,10 +7,13 @@ export interface PostMeta {
   title: string
   category: string
   excerpt: string
+  description: string
   date: string
+  updatedAt: string
   dateFormatted: string
   tags: string[]
   coverImage?: string
+  imageAlt?: string
   readTime: string
 }
 
@@ -39,15 +42,19 @@ function calcReadTime(content: string): string {
 
 function parsePost(slug: string, raw: string): PostMeta & { content: string } {
   const { data, content } = matter(raw)
+  const excerpt = (data.excerpt as string) ?? ''
   return {
     slug,
     title: (data.title as string) ?? '',
     category: (data.category as string) ?? 'kien-thuc',
-    excerpt: (data.excerpt as string) ?? '',
+    excerpt,
+    description: excerpt,
     date: (data.date as string) ?? '',
+    updatedAt: (data.updatedAt as string) ?? (data.date as string) ?? '',
     dateFormatted: data.date ? formatDate(data.date as string) : '',
     tags: (data.tags as string[]) ?? [],
-    coverImage: data.coverImage as string | undefined,
+    coverImage: (data.coverImage as string) || undefined,
+    imageAlt: (data.imageAlt as string) ?? undefined,
     readTime: calcReadTime(content),
     content,
   }
@@ -60,15 +67,19 @@ export function getAllPosts(): PostMeta[] {
       const slug = fileName.replace(/\.mdx$/, '')
       const raw = fs.readFileSync(path.join(postsDir, fileName), 'utf8')
       const { data, content } = matter(raw)
+      const excerpt = (data.excerpt as string) ?? ''
       return {
         slug,
         title: (data.title as string) ?? '',
         category: (data.category as string) ?? 'kien-thuc',
-        excerpt: (data.excerpt as string) ?? '',
+        excerpt,
+        description: excerpt,
         date: (data.date as string) ?? '',
+        updatedAt: (data.updatedAt as string) ?? (data.date as string) ?? '',
         dateFormatted: data.date ? formatDate(data.date as string) : '',
         tags: (data.tags as string[]) ?? [],
-        coverImage: data.coverImage as string | undefined,
+        coverImage: (data.coverImage as string) || undefined,
+        imageAlt: (data.imageAlt as string) ?? undefined,
         readTime: calcReadTime(content),
       } satisfies PostMeta
     })
@@ -82,6 +93,22 @@ export function getPostBySlug(slug: string): Post | null {
   } catch {
     return null
   }
+}
+
+export function getAllTags(): string[] {
+  const all = getAllPosts()
+  const set = new Set<string>()
+  for (const post of all) {
+    for (const tag of post.tags) set.add(tag)
+  }
+  return Array.from(set).sort()
+}
+
+export function getAllCategories(): string[] {
+  const all = getAllPosts()
+  const set = new Set<string>()
+  for (const post of all) set.add(post.category)
+  return Array.from(set).sort()
 }
 
 export function getRelatedPosts(currentSlug: string, tags: string[], limit = 3): PostMeta[] {

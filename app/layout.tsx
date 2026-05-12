@@ -27,11 +27,63 @@ const notoSansMono = Noto_Sans_Mono({
   weight: ["400", "700"],
 });
 
+const SITE_URL = "https://panharmon.com";
+
 export const metadata: Metadata = {
-  title: "Panharmon — Bí mật của giấc mơ",
-  description: "Giải mã ngôn ngữ bí ẩn của giấc mơ. Kết hợp tâm lý học Jung, tâm linh học và trí tuệ nhân tạo.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Panharmon — Giải Mã Giấc Mơ Theo Tâm Lý Jung & Tâm Linh",
+    template: "%s | Panharmon",
+  },
+  description:
+    "Giải mã ngôn ngữ bí ẩn của giấc mơ bằng tâm lý học Jung, tâm linh phương Đông và trí tuệ nhân tạo. Khám phá ý nghĩa ẩn sau giấc mơ của bạn.",
+  keywords: [
+    "giải mã giấc mơ",
+    "nằm mơ thấy",
+    "ý nghĩa giấc mơ",
+    "tâm lý Jung",
+    "giấc mơ tiên tri",
+    "biểu tượng giấc mơ",
+    "phân tích giấc mơ",
+    "Panharmon",
+  ],
+  authors: [{ name: "Panharmon", url: SITE_URL }],
+  creator: "Panharmon",
+  publisher: "Panharmon",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: SITE_URL,
+    siteName: "Panharmon",
+    title: "Panharmon — Giải Mã Giấc Mơ Theo Tâm Lý Jung & Tâm Linh",
+    description:
+      "Giải mã ngôn ngữ bí ẩn của giấc mơ bằng tâm lý học Jung, tâm linh phương Đông và trí tuệ nhân tạo.",
+    images: [
+      {
+        url: "/og-default.png",
+        width: 1200,
+        height: 630,
+        alt: "Panharmon — Giải Mã Giấc Mơ",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Panharmon — Giải Mã Giấc Mơ Theo Tâm Lý Jung & Tâm Linh",
+    description:
+      "Giải mã ngôn ngữ bí ẩn của giấc mơ bằng tâm lý học Jung, tâm linh phương Đông và trí tuệ nhân tạo.",
+    images: ["/og-default.png"],
+  },
   icons: {
     icon: "/favicon.png",
+  },
+  alternates: {
+    canonical: SITE_URL,
   },
 };
 

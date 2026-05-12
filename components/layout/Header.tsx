@@ -1,6 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navLinks = [
+  { label: "Giải mã", href: "/giai-ma-giac-mo" },
+  { label: "Sản phẩm", href: "/san-pham" },
+  { label: "Bài viết", href: "/bai-viet" },
+  { label: "Giới thiệu", href: "/gioi-thieu" },
+];
 
 export default function Header() {
+  const pathname = usePathname();
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-5 flex items-center justify-between bg-void/95 backdrop-blur-sm border-b border-veil/20">
       {/* Logo */}
@@ -25,46 +37,31 @@ export default function Header() {
       </Link>
 
       {/* Nav links */}
-      <nav className="hidden md:block">
+      <nav className="hidden md:block" aria-label="Menu chính">
         <ul className="flex gap-9 list-none m-0 p-0">
-          <li>
-            <Link
-              className="font-mono text-xs tracking-widest uppercase text-lavender hover:text-gold opacity-70 hover:opacity-100 transition-all duration-300"
-              href="#giai-ma"
-            >
-              Giải mã
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="font-mono text-xs tracking-widest uppercase text-lavender hover:text-gold opacity-70 hover:opacity-100 transition-all duration-300"
-              href="#san-pham"
-            >
-              Sản phẩm
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="font-mono text-xs tracking-widest uppercase text-lavender hover:text-gold opacity-70 hover:opacity-100 transition-all duration-300"
-              href="#bai-viet"
-            >
-              Bài viết
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="font-mono text-xs tracking-widest uppercase text-lavender hover:text-gold opacity-70 hover:opacity-100 transition-all duration-300"
-              href="#tu-van"
-            >
-              Tư vấn
-            </Link>
-          </li>
+          {navLinks.map(({ label, href }) => {
+            const isActive = pathname === href || pathname.startsWith(href + "/");
+            return (
+              <li key={href}>
+                <Link
+                  className={`font-mono text-xs tracking-widest uppercase transition-all duration-300 ${
+                    isActive
+                      ? "text-gold opacity-100"
+                      : "text-lavender hover:text-gold opacity-70 hover:opacity-100"
+                  }`}
+                  href={href}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
-      {/* CTA */}
+      {/* CTA — trỏ về form giải mã trên homepage */}
       <Link
-        href="#giai-ma"
+        href="/#giai-ma"
         className="font-mono text-xs tracking-widest uppercase bg-gold text-void px-6 py-2.5 hover:bg-gold-light transition-colors duration-300"
       >
         Giải mã ngay

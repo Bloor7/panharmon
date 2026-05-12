@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HeroSection() {
   const ringsSizes = [680, 540, 400, 280, 180, 100];
 
@@ -98,18 +100,18 @@ export default function HeroSection() {
         </p>
 
         <div className="reveal flex flex-col sm:flex-row gap-4 items-center">
-          <a
+          <Link
             href="#giai-ma"
             className="font-mono text-xs tracking-widest uppercase bg-gold text-void px-8 py-3.5 hover:bg-gold-light transition-colors duration-300"
           >
             Bắt đầu miễn phí
-          </a>
-          <a
+          </Link>
+          <Link
             href="#gioi-thieu"
             className="font-mono text-xs tracking-widest uppercase border border-iris text-lavender px-8 py-3.5 hover:border-gold hover:text-gold transition-all duration-300"
           >
             Tìm hiểu thêm
-          </a>
+          </Link>
         </div>
       </div>
 

@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export default function ClientProviders() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathname = usePathname();
 
+  // Stars canvas + custom cursor — persistent, runs once on mount
   useEffect(() => {
     // ── Stars canvas ──────────────────────────────────────────────
     const canvas = canvasRef.current;
@@ -82,29 +85,19 @@ export default function ClientProviders() {
     };
     animateRing();
 
-    // Hover effect on interactive elements
-    const onMouseEnter = () => {
-      if (ring) {
-        ring.style.width = "48px";
-        ring.style.height = "48px";
-        ring.style.borderColor = "rgba(212, 168, 83, 0.7)";
-      }
+    return () => {
+      cancelAnimationFrame(starsAnimId);
+      cancelAnimationFrame(cursorAnimId);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
     };
-    const onMouseLeave = () => {
-      if (ring) {
-        ring.style.width = "32px";
-        ring.style.height = "32px";
-        ring.style.borderColor = "rgba(212, 168, 83, 0.45)";
-      }
-    };
+  }, []);
 
-    const interactives = document.querySelectorAll("a, button, [role='button']");
-    interactives.forEach((el) => {
-      el.addEventListener("mouseenter", onMouseEnter);
-      el.addEventListener("mouseleave", onMouseLeave);
-    });
-
-    // ── Scroll reveal ─────────────────────────────────────────────
+  // ── Scroll reveal — re-runs on every route change ────────────────
+  // IntersectionObserver must re-observe fresh DOM elements after each navigation.
+  // ClientProviders lives in layout and does NOT remount between routes,
+  // so without [pathname] dependency the observer would never see new page elements.
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -116,24 +109,45 @@ export default function ClientProviders() {
       { threshold: 0.08 }
     );
 
-    // Observe on next tick so DOM is ready
-    const observeTimer = setTimeout(() => {
+    const timer = setTimeout(() => {
       document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    }, 100);
+    }, 50);
 
     return () => {
-      cancelAnimationFrame(starsAnimId);
-      cancelAnimationFrame(cursorAnimId);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouseMove);
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [pathname]);
+
+  // ── Cursor hover effect — re-attaches to new interactive elements ─
+  useEffect(() => {
+    const ring = ringRef.current;
+    if (!ring) return;
+
+    const onMouseEnter = () => {
+      ring.style.width = "48px";
+      ring.style.height = "48px";
+      ring.style.borderColor = "rgba(212, 168, 83, 0.7)";
+    };
+    const onMouseLeave = () => {
+      ring.style.width = "32px";
+      ring.style.height = "32px";
+      ring.style.borderColor = "rgba(212, 168, 83, 0.45)";
+    };
+
+    const interactives = document.querySelectorAll("a, button, [role='button']");
+    interactives.forEach((el) => {
+      el.addEventListener("mouseenter", onMouseEnter);
+      el.addEventListener("mouseleave", onMouseLeave);
+    });
+
+    return () => {
       interactives.forEach((el) => {
         el.removeEventListener("mouseenter", onMouseEnter);
         el.removeEventListener("mouseleave", onMouseLeave);
       });
-      observer.disconnect();
-      clearTimeout(observeTimer);
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <>

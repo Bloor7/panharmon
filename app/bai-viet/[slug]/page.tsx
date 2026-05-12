@@ -5,6 +5,10 @@ import type { Metadata } from 'next'
 import type { MDXComponents } from 'mdx/types'
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/posts'
 import RelatedPosts from '@/components/blog/RelatedPosts'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import JsonLd from '@/components/seo/JsonLd'
+
+const SITE_URL = 'https://panharmon.com'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -18,10 +22,40 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) return {}
+
+  const canonical = `${SITE_URL}/bai-viet/${slug}`
+  const ogImage = post.coverImage
+    ? { url: post.coverImage, alt: post.imageAlt ?? post.title }
+    : { url: '/og-default.png', alt: post.title }
+
   return {
-    title: `${post.title} — Panharmon`,
+    title: post.title,
     description: post.excerpt,
+    alternates: { canonical },
+    openGraph: {
+      type: 'article',
+      url: canonical,
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.date,
+      modifiedTime: post.updatedAt || post.date,
+      tags: post.tags,
+      images: [{ url: ogImage.url, width: 1200, height: 630, alt: ogImage.alt }],
+      siteName: 'Panharmon',
+      locale: 'vi_VN',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage.url],
+    },
   }
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  'giai-ma': 'Giải Mã',
+  'kien-thuc': 'Kiến Thức',
 }
 
 const mdxComponents: MDXComponents = {
@@ -96,11 +130,54 @@ export default async function PostPage({ params }: PageProps) {
   if (!post) notFound()
 
   const related = getRelatedPosts(post.slug, post.tags, 3)
+  const categoryLabel = CATEGORY_LABELS[post.category] ?? post.category
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    url: `${SITE_URL}/bai-viet/${slug}`,
+    datePublished: post.date,
+    dateModified: post.updatedAt || post.date,
+    author: {
+      '@type': 'Organization',
+      name: 'Panharmon',
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Panharmon',
+      url: SITE_URL,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE_URL}/bai-viet/${slug}`,
+    },
+    ...(post.coverImage ? { image: post.coverImage } : {}),
+    keywords: post.tags.join(', '),
+    inLanguage: 'vi',
+    isPartOf: {
+      '@type': 'Blog',
+      name: 'Mộng Triệu Ký Sự',
+      url: `${SITE_URL}/bai-viet`,
+    },
+  }
 
   return (
-    <main className="min-h-screen bg-void">
+    <div className="min-h-screen bg-void">
+      <JsonLd data={articleSchema} />
       <div className="relative z-10 pt-28 pb-24 px-6">
         <div className="max-w-3xl mx-auto">
+          {/* Breadcrumbs */}
+          <Breadcrumbs
+            items={[
+              { label: 'Trang chủ', href: '/' },
+              { label: 'Bài viết', href: '/bai-viet' },
+              { label: post.title, href: `/bai-viet/${slug}` },
+            ]}
+          />
+
           {/* Back link */}
           <Link
             href="/bai-viet"
@@ -116,7 +193,7 @@ export default async function PostPage({ params }: PageProps) {
           <header className="mb-12">
             <div className="flex items-center gap-4 mb-5">
               <span className="font-mono text-xs tracking-[0.2em] text-gold uppercase border border-gold/30 px-3 py-1">
-                {post.category === 'giai-ma' ? 'Giải Mã' : 'Kiến Thức'}
+                {categoryLabel}
               </span>
               <span className="font-mono text-xs text-iris">{post.dateFormatted}</span>
               <span className="font-mono text-xs text-iris">{post.readTime}</span>
@@ -159,6 +236,6 @@ export default async function PostPage({ params }: PageProps) {
           <RelatedPosts posts={related} />
         </div>
       </div>
-    </main>
+    </div>
   )
 }
