@@ -3,40 +3,47 @@ import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import type { Metadata } from 'next'
 import type { MDXComponents } from 'mdx/types'
-import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/posts'
+import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/db/posts'
 import RelatedPosts from '@/components/blog/RelatedPosts'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import JsonLd from '@/components/seo/JsonLd'
 
 const SITE_URL = 'https://panharmon.com'
 
+// Allow on-demand ISR for new Supabase posts not in generateStaticParams
+export const dynamicParams = true
+export const revalidate = 3600
+
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  return getAllPosts().map(post => ({ slug: post.slug }))
+  const posts = await getAllPosts()
+  return posts.map(post => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
   if (!post) return {}
 
   const canonical = `${SITE_URL}/bai-viet/${slug}`
+  const title = post.seoTitle || post.title
+  const description = post.seoDescription || post.excerpt
   const ogImage = post.coverImage
-    ? { url: post.coverImage, alt: post.imageAlt ?? post.title }
-    : { url: '/og-default.png', alt: post.title }
+    ? { url: post.coverImage, alt: post.imageAlt ?? title }
+    : { url: '/og-default.png', alt: title }
 
   return {
-    title: post.title,
-    description: post.excerpt,
+    title,
+    description,
     alternates: { canonical },
     openGraph: {
       type: 'article',
       url: canonical,
-      title: post.title,
-      description: post.excerpt,
+      title,
+      description,
       publishedTime: post.date,
       modifiedTime: post.updatedAt || post.date,
       tags: post.tags,
@@ -46,8 +53,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt,
+      title,
+      description,
       images: [ogImage.url],
     },
   }
@@ -125,11 +132,11 @@ const mdxComponents: MDXComponents = {
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
 
   if (!post) notFound()
 
-  const related = getRelatedPosts(post.slug, post.tags, 3)
+  const related = await getRelatedPosts(post.slug, post.tags, 3)
   const categoryLabel = CATEGORY_LABELS[post.category] ?? post.category
 
   const articleSchema = {
@@ -140,28 +147,13 @@ export default async function PostPage({ params }: PageProps) {
     url: `${SITE_URL}/bai-viet/${slug}`,
     datePublished: post.date,
     dateModified: post.updatedAt || post.date,
-    author: {
-      '@type': 'Organization',
-      name: 'Panharmon',
-      url: SITE_URL,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Panharmon',
-      url: SITE_URL,
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${SITE_URL}/bai-viet/${slug}`,
-    },
+    author: { '@type': 'Organization', name: 'Panharmon', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'Panharmon', url: SITE_URL },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/bai-viet/${slug}` },
     ...(post.coverImage ? { image: post.coverImage } : {}),
     keywords: post.tags.join(', '),
     inLanguage: 'vi',
-    isPartOf: {
-      '@type': 'Blog',
-      name: 'Mộng Triệu Ký Sự',
-      url: `${SITE_URL}/bai-viet`,
-    },
+    isPartOf: { '@type': 'Blog', name: 'Mộng Triệu Ký Sự', url: `${SITE_URL}/bai-viet` },
   }
 
   return (
@@ -169,7 +161,6 @@ export default async function PostPage({ params }: PageProps) {
       <JsonLd data={articleSchema} />
       <div className="relative z-10 pt-28 pb-24 px-6">
         <div className="max-w-3xl mx-auto">
-          {/* Breadcrumbs */}
           <Breadcrumbs
             items={[
               { label: 'Trang chủ', href: '/' },
@@ -178,7 +169,6 @@ export default async function PostPage({ params }: PageProps) {
             ]}
           />
 
-          {/* Back link */}
           <Link
             href="/bai-viet"
             className="inline-flex items-center gap-2 font-mono text-xs tracking-widest text-iris hover:text-gold uppercase transition-colors duration-300 mb-12 group"
@@ -189,7 +179,6 @@ export default async function PostPage({ params }: PageProps) {
             Tất cả bài viết
           </Link>
 
-          {/* Article header */}
           <header className="mb-12">
             <div className="flex items-center gap-4 mb-5">
               <span className="font-mono text-xs tracking-[0.2em] text-gold uppercase border border-gold/30 px-3 py-1">
@@ -210,10 +199,7 @@ export default async function PostPage({ params }: PageProps) {
             {post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {post.tags.map(tag => (
-                  <span
-                    key={tag}
-                    className="font-mono text-xs text-iris border border-iris/30 px-3 py-1"
-                  >
+                  <span key={tag} className="font-mono text-xs text-iris border border-iris/30 px-3 py-1">
                     {tag}
                   </span>
                 ))}
@@ -227,12 +213,10 @@ export default async function PostPage({ params }: PageProps) {
             </div>
           </header>
 
-          {/* MDX content */}
           <article className="prose-panharmon">
             <MDXRemote source={post.content} components={mdxComponents} />
           </article>
 
-          {/* Related posts */}
           <RelatedPosts posts={related} />
         </div>
       </div>

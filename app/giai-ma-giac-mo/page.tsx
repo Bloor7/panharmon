@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getAllPosts, getAllCategories } from '@/lib/posts'
+import { getPublishedPosts, getAllCategories } from '@/lib/db/posts'
 import PostCard from '@/components/blog/PostCard'
 import JsonLd from '@/components/seo/JsonLd'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
@@ -55,9 +55,11 @@ const CATEGORY_LABELS: Record<string, string> = {
   'kien-thuc': 'Kiến Thức Tâm Lý',
 }
 
-export default function GiaiMaGiacMoPage() {
-  const posts = getAllPosts()
-  const categories = getAllCategories()
+export const revalidate = 3600
+
+export default async function GiaiMaGiacMoPage() {
+  const posts = await getPublishedPosts()
+  const categories = await getAllCategories()
 
   const postsByCategory: Record<string, typeof posts> = {}
   for (const cat of categories) {

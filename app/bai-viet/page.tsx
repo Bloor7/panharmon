@@ -1,4 +1,4 @@
-import { getAllPosts } from '@/lib/posts'
+import { getPublishedPosts } from '@/lib/db/posts'
 import SearchBar from '@/components/blog/SearchBar'
 import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
@@ -21,8 +21,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function BaiVietPage() {
-  const posts = getAllPosts()
+export const revalidate = 3600
+
+export default async function BaiVietPage() {
+  const posts = await getPublishedPosts()
 
   const collectionSchema = {
     '@context': 'https://schema.org',
